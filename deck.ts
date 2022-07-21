@@ -2,7 +2,7 @@ import { differenceInCalendarDays, isToday } from "date-fns";
 import { readFileSync, writeFileSync } from "fs";
 import { IFlashcard, reviewFlashcard } from "./flashcard";
 
-export let lastSeen: Date = new Date(); // The last date the deck had been loaded
+export let lastSeen = new Date().getTime(); // The last date the deck had been loaded
 export let stack: string[] = []; // The current flashcards to be reviewed for the day
 export let flashcards: {
     [key: string]: IFlashcard;
@@ -17,6 +17,8 @@ export const load = (filePath: string) => {
     const data = JSON.parse(rawData);
 
     // Updating the deck in memory with data from the file
+
+    // Date's
     lastSeen = data.lastSeen;
 
     if (isToday(lastSeen)) {
@@ -31,13 +33,13 @@ export const load = (filePath: string) => {
 };
 
 export const save = (filePath?: string) => {
-    if (source === undefined) {
+    // Save all deck data to `filePath` or the current deck's filePath
+    filePath = filePath ?? source;
+
+    if (filePath === undefined) {
         // This error can be caught inside the main application code
         throw new Error("No flashcards file has been opened.");
     }
-
-    // Save all deck data to `filePath` or the current deck's filePath
-    filePath = filePath ?? source;
 
     const data = {
         lastSeen: new Date(),

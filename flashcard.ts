@@ -1,8 +1,9 @@
 import { addDays } from "date-fns";
 import * as uuid from "uuid";
 
-const getIntervalDate = (interval: number, date?: Date) => {
-    return addDays(date ?? new Date(), interval);
+// Uses optional `date` argument
+const getIntervalDate = (interval: number, date?: number) => {
+    return addDays(date ?? new Date().getTime(), interval).getTime();
 };
 
 export interface IFlashcard {
@@ -12,7 +13,7 @@ export interface IFlashcard {
     easiness: number; // Reflects how easy it is to recall the content
     interval: number; // The number of days after which a review is need
     repetitions: number; // How many times the flashcard has been recalled correctly in a row
-    nextReview: Date; // The earliest date we can review the flashcard
+    nextReview: number; // The earliest date we can review the flashcard
 }
 
 export const createFlashcard = (
@@ -26,14 +27,14 @@ export const createFlashcard = (
         easiness: 2.5,
         interval: 0,
         repetitions: 0,
-        nextReview: new Date(), // So that we review it on the day of creation
+        nextReview: new Date().getTime(), // So that we review it on the day of creation or later
     };
 };
 
 export const reviewFlashcard = (
     flashcard: IFlashcard,
     quality: number,
-    reviewDate?: Date
+    reviewDate?: number
 ) => {
     flashcard.repetitions++;
 

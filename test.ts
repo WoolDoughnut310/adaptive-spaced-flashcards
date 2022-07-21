@@ -1,7 +1,7 @@
 import { IFlashcard, createFlashcard, reviewFlashcard } from "./flashcard";
 import { formatISO } from "date-fns"; // So that we can see the dates nicely
 
-const formatDate = (date: Date) => {
+const formatDate = (date: number) => {
     return formatISO(date, { representation: "date" });
 };
 
@@ -33,7 +33,7 @@ console.log(flashcard);
 // Let's review the card
 let quality = 5; // perfect response
 
-let currentDate = new Date();
+let currentDate = new Date().getTime();
 
 // Make a review and mutate the flashcard
 let revisit = reviewFlashcard(flashcard, quality, currentDate);
